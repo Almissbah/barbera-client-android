@@ -3,8 +3,8 @@ This is a demo Application for testing google FCM.
 
 ## ScreenShots:
 
-<img src="barbera_1.jpg" width="300">  <img src="barbera_2.jpg" width="300">  <img src="barbera_3.jpg" width="300"> 
-
+<img src="barbera_client_1.jpg" width="300">  <img src="barbera_client_2.jpg" width="300">  <img src="barbera_client_3.jpg" width="300"> 
+ <img src="barbera_client_4.jpg" width="300"> 
 ------
 
 ## App Features

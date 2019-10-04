@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Barbera Client</string>
+    <string name="phone_no">Phone</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="request_accepted">Your client has accepted the request</string>
+    <string name="ok">ok</string>
+    <string name="please_wait">please wait</string>
+    <string name="networkErr">Please check you internet connection !</string>
+    <string name="notification">Notification</string>
+    <string name="status_busy">I\'m busy , I cant recieve new orders right now</string>
+    <string name="status_ready">I\'m ready to recive new requests .</string>
+    <string name="new_order">You have a new order</string>
+    <string name="exit">Exit</string>
+    <string name="logout_notify">Confirm log out ?</string>
+    <string name="cancel">Cancel</string>
+</resources>

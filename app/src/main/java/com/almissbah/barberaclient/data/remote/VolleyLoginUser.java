@@ -1,13 +1,14 @@
-package com.almissbha.barberaclient.data.remote;
+package com.almissbah.barberaclient.data.remote;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 
-
-import com.almissbha.barberaclient.R;
-import com.almissbha.barberaclient.data.local.SharedPrefManager;
-import com.almissbha.barberaclient.model.User;
-import com.almissbha.barberaclient.ui.OrderDetailActivity;
-import com.almissbha.barberaclient.utils.MyUtilities;
+import com.almissbah.barberaclient.R;
+import com.almissbah.barberaclient.model.User;
+import com.almissbah.barberaclient.ui.LoginActivity;
+import com.almissbah.barberaclient.ui.MainActivity;
+import com.almissbah.barberaclient.utils.MyUtilities;
+import com.almissbah.barberaclient.data.local.SharedPrefManager;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,23 +24,26 @@ import org.json.JSONObject;
  * Created by mohamed on 12/4/2017.
  */
 
-public class VollyAcceptOrder {
-    OrderDetailActivity mCtx;
-    String costumerPhone,balanceTime;
+public class VolleyLoginUser {
+    LoginActivity mCtx;
+    String username,password,token;
     ProgressDialog progress;
-    User user;
-    public VollyAcceptOrder(OrderDetailActivity mCtx, String...data) {
+    public VolleyLoginUser(LoginActivity mCtx, String...data) {
+        username= data[0];
+        password= data[1];
         this.mCtx=mCtx;
-        user =mCtx.user;
+
         progress= new ProgressDialog(mCtx);
         progress.setMessage(mCtx.getString(R.string.please_wait));
         progress.setCancelable(false);
         progress.show();
 
-        String query="?user_id="+ user.getId()+
-                "&order_id="+  mCtx.order.getId()+
-                "&admin_id="+  mCtx.order.getAdminId();
-        HttpRequest(ServerAPIs.getAccept_order_url()+query);
+        token= SharedPrefManager.getInstance(mCtx).getDeviceToken();
+        if(token==null){token="no token";}
+        String query="?username="+ MyUtilities.getEncodedString(username)+
+                "&password="+ MyUtilities.getEncodedString(password)+
+                "&token="+ MyUtilities.getEncodedString(token) ;
+        HttpRequest(ServerAPIs.getLogin_url()+query);
 
     }
 
@@ -55,16 +59,22 @@ public class VollyAcceptOrder {
                         JSONObject json= null;
                         try {
                             json = new JSONObject(response);
+                            User user =new User();
                         if( json.getString("success").equals("1")){
-                            mCtx.order.setAccepted(true);
-                            mCtx.order.setOrderNew(false);
-                            SharedPrefManager.getInstance(mCtx).saveOrder( mCtx.order);
-                            MyUtilities.showCustomToast(mCtx,"Accepted successfully !");
-                            mCtx.finish();
 
+                            user.setId(json.getInt("user_id"));
+                            user.setLogged(true);
+                            user.setUserName(json.getString("user_name"));
+                            user.setToken(token);
+                            Intent i=new Intent(mCtx, MainActivity.class);
+                            SharedPrefManager.getInstance(mCtx).saveUser(user);
+                            i.putExtra("user", user);
+                            mCtx.startActivity(i);
+                            mCtx.finish();
                         }else
                         {
                             MyUtilities.showErrorDialog(mCtx,json.getString("message"));
+
                         }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -75,6 +85,9 @@ public class VollyAcceptOrder {
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
                 MyUtilities.showCustomToast(mCtx,mCtx.getString(R.string.networkErr));
+                Intent i=new Intent(mCtx, MainActivity.class);
+                mCtx.startActivity(i);
+                mCtx.finish();
 
             }
         });

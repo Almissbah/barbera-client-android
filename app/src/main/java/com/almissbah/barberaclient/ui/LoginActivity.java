@@ -1,18 +1,13 @@
-package com.almissbha.barberaclient.ui;
+package com.almissbah.barberaclient.ui;
 
-import android.os.Build;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.almissbha.barberaclient.R;
-import com.almissbha.barberaclient.data.remote.VollyLoginUser;
-import com.almissbha.barberaclient.utils.MyUtilities;
+import com.almissbah.barberaclient.R;
+import com.almissbah.barberaclient.data.remote.VolleyLoginUser;
+import com.almissbah.barberaclient.utils.MyUtilities;
 
 
 public class LoginActivity extends BaseActivity {
@@ -37,7 +32,7 @@ public class LoginActivity extends BaseActivity {
                 String password=edt_password.getText().toString();
                 if(username.equals("")||password.equals("")){
                     MyUtilities.showCustomToast(mCtx,"Please do not leave an empty field !");}
-                else new VollyLoginUser(mCtx,username,password);
+                else new VolleyLoginUser(mCtx,username,password);
             }
         });
     }

@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient.utils;
+package com.almissbah.barberaclient.utils;
 
 /**
  * Created by mohamed on 2/25/2017.
@@ -15,7 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
 
-import com.almissbha.barberaclient.R;
+import com.almissbah.barberaclient.R;
 
 import java.io.IOException;
 import java.io.InputStream;

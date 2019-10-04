@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient.model;
+package com.almissbah.barberaclient.model;
 
 import java.io.Serializable;
 

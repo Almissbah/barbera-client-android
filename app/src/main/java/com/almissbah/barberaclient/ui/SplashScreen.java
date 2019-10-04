@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient.ui;
+package com.almissbah.barberaclient.ui;
 
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.almissbha.barberaclient.R;
-import com.almissbha.barberaclient.model.User;
+import com.almissbah.barberaclient.R;
+import com.almissbah.barberaclient.model.User;
 
 public class SplashScreen extends AppCompatActivity {
     SplashScreen   mCtx;

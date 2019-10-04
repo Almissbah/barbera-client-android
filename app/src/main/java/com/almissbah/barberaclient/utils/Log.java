@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient.utils;
+package com.almissbah.barberaclient.utils;
 
 /**
  * Created by mohamed on 12/24/2017.

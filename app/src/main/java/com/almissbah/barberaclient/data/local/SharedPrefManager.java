@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient.data.local;
+package com.almissbah.barberaclient.data.local;
 
 /*
   Created by mohamed on 2/25/2017.
@@ -7,8 +7,8 @@ package com.almissbha.barberaclient.data.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.almissbha.barberaclient.model.Order;
-import com.almissbha.barberaclient.model.User;
+import com.almissbah.barberaclient.model.Order;
+import com.almissbah.barberaclient.model.User;
 import com.google.gson.Gson;
 
 public class SharedPrefManager {

@@ -1,25 +1,23 @@
-package com.almissbha.barberaclient.ui;
+package com.almissbah.barberaclient.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.almissbha.barberaclient.R;
-import com.almissbha.barberaclient.data.local.SharedPrefManager;
-import com.almissbha.barberaclient.firebase.MyFirebaseMessagingService;
-import com.almissbha.barberaclient.data.remote.VollyAcceptOrder;
-import com.almissbha.barberaclient.model.Order;
-import com.almissbha.barberaclient.model.User;
+import com.almissbah.barberaclient.R;
+import com.almissbah.barberaclient.data.local.SharedPrefManager;
+import com.almissbah.barberaclient.firebase.MyFirebaseMessagingService;
+import com.almissbah.barberaclient.data.remote.VolleyAcceptOrder;
+import com.almissbah.barberaclient.model.Order;
+import com.almissbah.barberaclient.model.User;
+import com.almissbah.barberaclient.utils.MyUtilities;
 
 public class OrderDetailActivity extends AppCompatActivity {
     public User user;
@@ -38,11 +36,12 @@ public class OrderDetailActivity extends AppCompatActivity {
         mCtx = OrderDetailActivity.this;
         sharedPrefManager = SharedPrefManager.getInstance(mCtx);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        btn_accept = (Button) findViewById(R.id.btn_accept);
-        cvOrders = (CardView) findViewById(R.id.cv_orders);
-        tvWaiting = (TextView) findViewById(R.id.tv_waiting);
-        tvCostumerPhone = (TextView) findViewById(R.id.tv_costumer_phone);
-        tvBalanceTime = (TextView) findViewById(R.id.tv_balance_time);
+        btn_accept = findViewById(R.id.btn_accept);
+        cvOrders = findViewById(R.id.cv_orders);
+        tvWaiting = findViewById(R.id.tv_waiting);
+        tvCostumerPhone = findViewById(R.id.tv_costumer_phone);
+        tvBalanceTime = findViewById(R.id.tv_balance_time);
+
         if (getIntent().hasExtra("user")) {
             user = (User) getIntent().getSerializableExtra("user");
         } else {
@@ -53,6 +52,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         } else {
             order = sharedPrefManager.getOrder();
         }
+
         if (order.isOrderNew()) {
             tvCostumerPhone.setText(order.getCustomerPhone());
             tvBalanceTime.setText(String.valueOf(order.getBalanceTime()));
@@ -62,10 +62,26 @@ public class OrderDetailActivity extends AppCompatActivity {
             cvOrders.setVisibility(View.GONE);
             tvWaiting.setVisibility(View.VISIBLE);
         }
+
         btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new VollyAcceptOrder(mCtx);
+                new VolleyAcceptOrder(mCtx, user, order, new VolleyAcceptOrder.CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        mCtx.order.setAccepted(true);
+                        mCtx.order.setOrderNew(false);
+                        SharedPrefManager.getInstance(mCtx).saveOrder(mCtx.order);
+                        MyUtilities.showCustomToast(mCtx, "Accepted successfully !");
+                        mCtx.finish();
+                    }
+
+                    @Override
+                    public void onFail(String msg) {
+                        MyUtilities.showErrorDialog(mCtx, msg);
+
+                    }
+                });
             }
         });
         registerReceiver(br, new IntentFilter(MyFirebaseMessagingService.BarberaBroadCast));

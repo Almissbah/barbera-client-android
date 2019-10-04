@@ -1,16 +1,16 @@
-package com.almissbha.barberaclient.firebase;
+package com.almissbah.barberaclient.firebase;
 
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 
-import com.almissbha.barberaclient.R;
-import com.almissbha.barberaclient.model.Order;
-import com.almissbha.barberaclient.model.User;
-import com.almissbha.barberaclient.ui.OrderDetailActivity;
-import com.almissbha.barberaclient.utils.Log;
-import com.almissbha.barberaclient.utils.MyNotificationManager;
+import com.almissbah.barberaclient.R;
+import com.almissbah.barberaclient.model.Order;
+import com.almissbah.barberaclient.model.User;
+import com.almissbah.barberaclient.ui.OrderDetailActivity;
+import com.almissbah.barberaclient.utils.Log;
+import com.almissbah.barberaclient.utils.MyNotificationManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

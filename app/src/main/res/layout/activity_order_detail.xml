@@ -5,7 +5,7 @@
     android:id="@+id/activity_order_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.almissbha.barberaclient.ui.OrderDetailActivity"
+    tools:context="com.almissbah.barberaclient.ui.OrderDetailActivity"
     android:orientation="vertical"
     android:layoutDirection="ltr">
 

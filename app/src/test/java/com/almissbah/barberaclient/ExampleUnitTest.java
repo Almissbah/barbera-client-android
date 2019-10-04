@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient;
+package com.almissbah.barberaclient;
 
 import org.junit.Test;
 

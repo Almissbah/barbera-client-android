@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient;
+package com.almissbah.barberaclient;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.almissbha.barberaclient", appContext.getPackageName());
+        assertEquals("com.almissbah.barberaclient", appContext.getPackageName());
     }
 }

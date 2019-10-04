@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient.utils;
+package com.almissbah.barberaclient.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.almissbha.barberaclient.R;
+import com.almissbah.barberaclient.R;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -24,7 +24,7 @@ import java.net.URLEncoder;
 public class MyUtilities {
 
 Activity activity;
- 
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void forceRTLIfSupported()
     {

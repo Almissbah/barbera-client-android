@@ -1,4 +1,4 @@
-package com.almissbha.barberaclient.ui;
+package com.almissbah.barberaclient.ui;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.almissbha.barberaclient.R;
+import com.almissbah.barberaclient.R;
 
 
 public class BaseActivity extends AppCompatActivity {

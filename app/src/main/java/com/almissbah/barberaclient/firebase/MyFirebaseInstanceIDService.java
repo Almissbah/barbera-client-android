@@ -1,8 +1,8 @@
-package com.almissbha.barberaclient.firebase;
+package com.almissbah.barberaclient.firebase;
 
 
-import com.almissbha.barberaclient.utils.Log;
-import com.almissbha.barberaclient.data.local.SharedPrefManager;
+import com.almissbah.barberaclient.utils.Log;
+import com.almissbah.barberaclient.data.local.SharedPrefManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 

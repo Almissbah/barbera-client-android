@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.almissbha.barberaclient.ui.MainActivity"
+    tools:context="com.almissbah.barberaclient.ui.MainActivity"
     android:orientation="vertical"
     android:gravity="center"
     android:background="@android:color/white"

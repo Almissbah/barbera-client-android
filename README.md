@@ -26,6 +26,9 @@ This is a demo Application for testing google FCM.
 * Android SharedPrefrences for storing user info.
 * Volley for API integration.
 * Gson for serialisation.
+* Firebase cloud messaging.
+* Brodcase reciever.
+* Shared prefrences.
 ------
 ## App links
 

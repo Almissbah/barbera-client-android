@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -17,17 +16,18 @@ import com.almissbah.barberaclient.firebase.MyFirebaseMessagingService;
 import com.almissbah.barberaclient.data.remote.VolleyAcceptOrder;
 import com.almissbah.barberaclient.model.Order;
 import com.almissbah.barberaclient.model.User;
+import com.almissbah.barberaclient.utils.AppConstants;
 import com.almissbah.barberaclient.utils.MyUtilities;
 
-public class OrderDetailActivity extends AppCompatActivity {
-    public User user;
-    public Order order;
-    public OrderDetailActivity mCtx;
-    Button btn_accept;
-    CardView cvOrders;
-    TextView tvWaiting;
-    TextView tvCostumerPhone, tvBalanceTime;
-    SharedPrefManager sharedPrefManager;
+public class OrderDetailActivity extends BaseActivity {
+    private User user;
+    private Order mOrder;
+    private OrderDetailActivity mCtx;
+    private Button btnAccept;
+    private CardView cvOrders;
+    private TextView tvWaiting;
+    private TextView tvCostumerPhone, tvBalanceTime;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,55 +36,68 @@ public class OrderDetailActivity extends AppCompatActivity {
         mCtx = OrderDetailActivity.this;
         sharedPrefManager = SharedPrefManager.getInstance(mCtx);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        btn_accept = findViewById(R.id.btn_accept);
-        cvOrders = findViewById(R.id.cv_orders);
-        tvWaiting = findViewById(R.id.tv_waiting);
-        tvCostumerPhone = findViewById(R.id.tv_costumer_phone);
-        tvBalanceTime = findViewById(R.id.tv_balance_time);
 
-        if (getIntent().hasExtra("user")) {
-            user = (User) getIntent().getSerializableExtra("user");
-        } else {
-            user = sharedPrefManager.getUser();
-        }
-        if (getIntent().hasExtra("order")) {
-            order = (Order) getIntent().getSerializableExtra("order");
-        } else {
-            order = sharedPrefManager.getOrder();
-        }
+        initUI();
+        getIntentData();
+        checkOrderStatus();
 
-        if (order.isOrderNew()) {
-            tvCostumerPhone.setText(order.getCustomerPhone());
-            tvBalanceTime.setText(String.valueOf(order.getBalanceTime()));
+       registerReceiver(br, new IntentFilter(MyFirebaseMessagingService.BARBERA_BROAD_CAST));
+    }
+
+    View.OnClickListener acceptClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            new VolleyAcceptOrder(mCtx, user, mOrder, new VolleyAcceptOrder.CallBack() {
+                @Override
+                public void onSuccess() {
+                    mCtx.mOrder.setAccepted(true);
+                    mCtx.mOrder.setOrderNew(false);
+                    SharedPrefManager.getInstance(mCtx).saveOrder(mCtx.mOrder);
+                    MyUtilities.showCustomToast(mCtx, mCtx.getString(R.string.msg_request_accepted));
+                    mCtx.finish();
+                }
+
+                @Override
+                public void onFail(String msg) {
+                    MyUtilities.showErrorDialog(mCtx, msg);
+
+                }
+            });
+        }
+    };
+
+    private void checkOrderStatus() {
+        if (mOrder.isOrderNew()) {
+            tvCostumerPhone.setText(mOrder.getCustomerPhone());
+            tvBalanceTime.setText(String.valueOf(mOrder.getBalanceTime()));
             cvOrders.setVisibility(View.VISIBLE);
             tvWaiting.setVisibility(View.GONE);
         } else {
             cvOrders.setVisibility(View.GONE);
             tvWaiting.setVisibility(View.VISIBLE);
         }
+    }
 
-        btn_accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new VolleyAcceptOrder(mCtx, user, order, new VolleyAcceptOrder.CallBack() {
-                    @Override
-                    public void onSuccess() {
-                        mCtx.order.setAccepted(true);
-                        mCtx.order.setOrderNew(false);
-                        SharedPrefManager.getInstance(mCtx).saveOrder(mCtx.order);
-                        MyUtilities.showCustomToast(mCtx, "Accepted successfully !");
-                        mCtx.finish();
-                    }
+    private void getIntentData() {
+        if (getIntent().hasExtra(AppConstants.INTENT_EXSTRA_USER)) {
+            user = (User) getIntent().getSerializableExtra(AppConstants.INTENT_EXSTRA_USER);
+        } else {
+            user = sharedPrefManager.getUser();
+        }
+        if (getIntent().hasExtra(AppConstants.INTENT_EXSTRA_ORDER)) {
+            mOrder = (Order) getIntent().getSerializableExtra(AppConstants.INTENT_EXSTRA_ORDER);
+        } else {
+            mOrder = sharedPrefManager.getOrder();
+        }
+    }
 
-                    @Override
-                    public void onFail(String msg) {
-                        MyUtilities.showErrorDialog(mCtx, msg);
-
-                    }
-                });
-            }
-        });
-        registerReceiver(br, new IntentFilter(MyFirebaseMessagingService.BarberaBroadCast));
+    private void initUI() {
+        btnAccept = findViewById(R.id.btn_accept);
+        cvOrders = findViewById(R.id.cv_orders);
+        tvWaiting = findViewById(R.id.tv_waiting);
+        tvCostumerPhone = findViewById(R.id.tv_costumer_phone);
+        tvBalanceTime = findViewById(R.id.tv_balance_time);
+        btnAccept.setOnClickListener(acceptClickListener);
     }
 
     @Override
@@ -97,19 +110,17 @@ public class OrderDetailActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getExtras() != null) {
-                String action = intent.getStringExtra("action");
+                String action = intent.getStringExtra(AppConstants.INTENT_EXSTRA_ACTION);
 
                 switch (action) {
-                    case "new_order":
+                    case AppConstants.ACTION_NEW_ORDER:
                         cvOrders.setVisibility(View.VISIBLE);
                         tvWaiting.setVisibility(View.GONE);
-                        order = (Order) intent.getSerializableExtra("order");
-                        tvCostumerPhone.setText(order.getCustomerPhone());
-                        tvBalanceTime.setText(String.valueOf(order.getBalanceTime()));
+                        mOrder = (Order) intent.getSerializableExtra(AppConstants.INTENT_EXSTRA_ORDER);
+                        tvCostumerPhone.setText(mOrder.getCustomerPhone());
+                        tvBalanceTime.setText(String.valueOf(mOrder.getBalanceTime()));
 
                         break;
-
-
                 }
             }
 

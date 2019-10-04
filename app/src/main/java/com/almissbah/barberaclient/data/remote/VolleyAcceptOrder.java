@@ -35,17 +35,23 @@ public class VolleyAcceptOrder {
         this.mCtx = context;
         this.mCallBack = callBack;
         this.mUser = user;
-
-        mProgress = new ProgressDialog(mCtx);
-        mProgress.setMessage(mCtx.getString(R.string.please_wait));
-        mProgress.setCancelable(false);
-        mProgress.show();
-
+        showProgressDialog();
         String query = "?user_id=" + user.getId() +
                 "&order_id=" + order.getId() +
                 "&admin_id=" + order.getAdminId();
         HttpRequest(ServerAPIs.getAccept_order_url() + query);
 
+    }
+
+    void showProgressDialog() {
+        mProgress = new ProgressDialog(mCtx);
+        mProgress.setMessage(mCtx.getString(R.string.please_wait));
+        mProgress.setCancelable(false);
+        mProgress.show();
+    }
+
+    void hideProgressDialog() {
+        if (mProgress != null) mProgress.dismiss();
     }
 
     private void HttpRequest(String url) {
@@ -56,7 +62,7 @@ public class VolleyAcceptOrder {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        mProgress.dismiss();
+                        hideProgressDialog();
                         JSONObject json = null;
                         try {
                             json = new JSONObject(response);
@@ -73,7 +79,7 @@ public class VolleyAcceptOrder {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgress.dismiss();
+                hideProgressDialog();
                 mCallBack.onFail(mCtx.getString(R.string.networkErr));
             }
         });

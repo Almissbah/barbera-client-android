@@ -19,7 +19,7 @@ public class BaseActivity extends AppCompatActivity {
 
         void changeStatusBarColor(){
             if (android.os.Build.VERSION.SDK_INT >= 21) {
-                // Set up the user interaction to manually show or hide the system UI.
+                // Set up the mUser interaction to manually show or hide the system UI.
                 Window window = this.getWindow();
 
                 // clear FLAG_TRANSLUCENT_STATUS flag:

@@ -1,6 +1,7 @@
 package com.almissbah.barberaclient.data.remote;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 
 import com.almissbah.barberaclient.R;
@@ -25,29 +26,38 @@ import org.json.JSONObject;
  */
 
 public class VolleyLoginUser {
-    LoginActivity mCtx;
-    String username,password,token;
-    ProgressDialog progress;
-    public VolleyLoginUser(LoginActivity mCtx, String...data) {
-        username= data[0];
-        password= data[1];
-        this.mCtx=mCtx;
+    private Context mCtx;
+    private ProgressDialog mProgress;
+    private CallBack mCallBack;
 
-        progress= new ProgressDialog(mCtx);
-        progress.setMessage(mCtx.getString(R.string.please_wait));
-        progress.setCancelable(false);
-        progress.show();
+    public VolleyLoginUser(Context mCtx, String username, String password, String token, CallBack callBack) {
+        this.mCallBack = callBack;
+        this.mCtx = mCtx;
 
-        token= SharedPrefManager.getInstance(mCtx).getDeviceToken();
-        if(token==null){token="no token";}
-        String query="?username="+ MyUtilities.getEncodedString(username)+
-                "&password="+ MyUtilities.getEncodedString(password)+
-                "&token="+ MyUtilities.getEncodedString(token) ;
-        HttpRequest(ServerAPIs.getLogin_url()+query);
+        showProgressDialog();
+        if (token == null) {
+            token = "no token";
+        }
+        String query = "?username=" + MyUtilities.getEncodedString(username) +
+                "&password=" + MyUtilities.getEncodedString(password) +
+                "&token=" + MyUtilities.getEncodedString(token);
+        HttpRequest(ServerAPIs.getLogin_url() + query);
 
     }
 
-     private void HttpRequest(String url){
+
+    void showProgressDialog() {
+        mProgress = new ProgressDialog(mCtx);
+        mProgress.setMessage(mCtx.getString(R.string.please_wait));
+        mProgress.setCancelable(false);
+        mProgress.show();
+    }
+
+    void hideProgressDialog() {
+        if (mProgress != null) mProgress.dismiss();
+    }
+
+    private void HttpRequest(String url) {
         RequestQueue queue = Volley.newRequestQueue(mCtx);
 
 // Request a string response from the provided URL.
@@ -55,43 +65,43 @@ public class VolleyLoginUser {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        progress.dismiss();
-                        JSONObject json= null;
+                        hideProgressDialog();
+                        JSONObject json = null;
                         try {
                             json = new JSONObject(response);
-                            User user =new User();
-                        if( json.getString("success").equals("1")){
+                            User user = new User();
+                            if (json.getString("success").equals("1")) {
 
-                            user.setId(json.getInt("user_id"));
-                            user.setLogged(true);
-                            user.setUserName(json.getString("user_name"));
-                            user.setToken(token);
-                            Intent i=new Intent(mCtx, MainActivity.class);
-                            SharedPrefManager.getInstance(mCtx).saveUser(user);
-                            i.putExtra("user", user);
-                            mCtx.startActivity(i);
-                            mCtx.finish();
-                        }else
-                        {
-                            MyUtilities.showErrorDialog(mCtx,json.getString("message"));
+                                user.setId(json.getInt("user_id"));
+                                user.setLogged(true);
+                                user.setUserName(json.getString("user_name"));
 
-                        }
+                                mCallBack.onSuccess(user);
+
+
+                            } else {
+                                mCallBack.onFail(json.getString("message"));
+                            }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            mCallBack.onFail(mCtx.getString(R.string.networkErr));
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progress.dismiss();
-                MyUtilities.showCustomToast(mCtx,mCtx.getString(R.string.networkErr));
-                Intent i=new Intent(mCtx, MainActivity.class);
-                mCtx.startActivity(i);
-                mCtx.finish();
+                hideProgressDialog();
+                mCallBack.onFail(mCtx.getString(R.string.networkErr));
+
 
             }
         });
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
-}
+    }
+
+    public interface CallBack {
+        void onSuccess(User user);
+
+        void onFail(String msg);
+    }
 }

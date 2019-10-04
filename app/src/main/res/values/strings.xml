@@ -15,4 +15,6 @@
     <string name="exit">Exit</string>
     <string name="logout_notify">Confirm log out ?</string>
     <string name="cancel">Cancel</string>
+    <string name="msg_fill_all_fields">Please do not leave an empty field !</string>
+    <string name="msg_request_accepted">Accepted successfully !</string>
 </resources>

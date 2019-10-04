@@ -12,14 +12,15 @@ import com.almissbah.barberaclient.R;
 import com.almissbah.barberaclient.data.local.SharedPrefManager;
 import com.almissbah.barberaclient.model.Order;
 import com.almissbah.barberaclient.model.User;
+import com.almissbah.barberaclient.utils.AppConstants;
 
 public class MainActivity extends BaseActivity {
-    MainActivity mCtx;
-    Button btnReady, btnBusy;
-    TextView tvStatusInfo, tvExit, tvLogout;
-    User user;
-    Order order;
-    SharedPrefManager sharedPrefManager;
+    private MainActivity mCtx;
+    private Button btnReady, btnBusy;
+    private TextView tvStatusInfo, tvExit, tvLogout;
+    private User mUser;
+    private Order mOrder;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,8 @@ public class MainActivity extends BaseActivity {
         public void onClick(View view) {
             setReady();
             Intent i = new Intent(mCtx, OrderDetailActivity.class);
-            //     i.putExtra("order", order);
-            i.putExtra("user", user);
+            //     i.putExtra("mOrder", mOrder);
+            i.putExtra(AppConstants.INTENT_EXSTRA_USER, mUser);
             startActivity(i);
         }
     };
@@ -93,20 +94,20 @@ public class MainActivity extends BaseActivity {
     };
 
     private void getIntentData() {
-        if (getIntent().hasExtra("user")) {
-            user = (User) getIntent().getSerializableExtra("user");
+        if (getIntent().hasExtra(AppConstants.INTENT_EXSTRA_USER)) {
+            mUser = (User) getIntent().getSerializableExtra(AppConstants.INTENT_EXSTRA_USER);
         } else {
-            user = sharedPrefManager.getUser();
+            mUser = sharedPrefManager.getUser();
         }
-        if (getIntent().hasExtra("order")) {
-            order = (Order) getIntent().getSerializableExtra("order");
+        if (getIntent().hasExtra(AppConstants.INTENT_EXSTRA_ORDER)) {
+            mOrder = (Order) getIntent().getSerializableExtra(AppConstants.INTENT_EXSTRA_ORDER);
         } else {
-            order = sharedPrefManager.getOrder();
+            mOrder = sharedPrefManager.getOrder();
         }
     }
 
     void checStatus() {
-        if (user.isReady()) {
+        if (mUser.isReady()) {
             setReady();
         } else {
             setBusy();

@@ -24,12 +24,7 @@ import java.net.URLEncoder;
 public class MyUtilities {
 
 Activity activity;
-
-    public MyUtilities(Activity mCtx) {
-        this.activity = mCtx;
-        // Locale.setDefault(locale);
-
-    }
+ 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void forceRTLIfSupported()
     {
@@ -55,7 +50,7 @@ Activity activity;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.custom_toast_layout, null);
-        TextView tv_toast_meassage=(TextView) view.findViewById(R.id.tv_toast_message);
+        TextView tv_toast_meassage= view.findViewById(R.id.tv_toast_message);
         tv_toast_meassage.setText(message);
         toast.setView(view);
         toast.show();

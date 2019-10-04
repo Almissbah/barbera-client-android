@@ -4,9 +4,9 @@ import android.app.ProgressDialog;
 
 
 import com.almissbha.barberaclient.R;
+import com.almissbha.barberaclient.data.local.SharedPrefManager;
 import com.almissbha.barberaclient.model.User;
 import com.almissbha.barberaclient.ui.OrderDetailActivity;
-import com.almissbha.barberaclient.utils.MyGsonManager;
 import com.almissbha.barberaclient.utils.MyUtilities;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -58,7 +58,7 @@ public class VollyAcceptOrder {
                         if( json.getString("success").equals("1")){
                             mCtx.order.setAccepted(true);
                             mCtx.order.setOrderNew(false);
-                            new MyGsonManager(mCtx).saveOrderObjectClass( mCtx.order);
+                            SharedPrefManager.getInstance(mCtx).saveOrder( mCtx.order);
                             MyUtilities.showCustomToast(mCtx,"Accepted successfully !");
                             mCtx.finish();
 

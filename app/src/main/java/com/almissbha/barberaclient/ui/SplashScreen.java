@@ -9,7 +9,6 @@ import android.view.WindowManager;
 
 import com.almissbha.barberaclient.R;
 import com.almissbha.barberaclient.model.User;
-import com.almissbha.barberaclient.utils.MyGsonManager;
 
 public class SplashScreen extends AppCompatActivity {
     SplashScreen   mCtx;

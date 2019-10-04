@@ -10,7 +10,6 @@ import com.almissbha.barberaclient.model.Order;
 import com.almissbha.barberaclient.model.User;
 import com.almissbha.barberaclient.ui.OrderDetailActivity;
 import com.almissbha.barberaclient.utils.Log;
-import com.almissbha.barberaclient.utils.MyGsonManager;
 import com.almissbha.barberaclient.utils.MyNotificationManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
